@@ -21,3 +21,20 @@ class BasicOsCmdParser:
                             'home' : parsedUser[5],
                             'shell' : parsedUser[6]})
         return result
+
+    def shadowInfo(self):
+        p = Popen(['/bin/cat', '/etc/shadow'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output, err = p.communicate()
+        output = output.decode("utf-8")[:-1].split('\n')
+        result = {}
+        for user in output:
+            parsedUser = user.split(':')
+            result[parsedUser[0]] = ({'username' : parsedUser[0],
+                            'password' : parsedUser[1],
+                            'lastchanged' : parsedUser[2],
+                            'min_day' : parsedUser[3],
+                            'password_expire' : parsedUser[4],
+                            'warn' : parsedUser[5],
+                            'inactive' : parsedUser[6],
+                            'account_expire' : parsedUser[7]})
+        return result
