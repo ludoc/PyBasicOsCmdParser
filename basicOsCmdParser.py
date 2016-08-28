@@ -38,3 +38,14 @@ class BasicOsCmdParser:
                             'inactive' : parsedUser[6],
                             'account_expire' : parsedUser[7]})
         return result
+
+    def nameserver(self):
+        p = Popen(['/bin/cat', '/etc/resolv.conf'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output, err = p.communicate()
+        output = output.decode("utf-8")[:-1].split('\n')
+        result = []
+        for ns in output:
+            if "nameserver" in ns:
+                parsedNs = ns.split(' ')
+                result.append(parsedNs[1])
+        return result
